@@ -148,6 +148,12 @@ function selectPad(pad: PadInfo) {
 }
 
 function handleKeyDown(event: KeyboardEvent) {
+  // Ignore key events when typing in input fields
+  const target = event.target as HTMLElement
+  if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
+    return
+  }
+
   const key = event.key
 
   // If we're selecting a pad for mapping
@@ -179,6 +185,12 @@ function handleKeyDown(event: KeyboardEvent) {
 }
 
 function handleKeyUp(event: KeyboardEvent) {
+  // Ignore key events when typing in input fields
+  const target = event.target as HTMLElement
+  if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
+    return
+  }
+
   const key = event.key
   const mapping = mappings.value.find(m => m.key === key)
 
