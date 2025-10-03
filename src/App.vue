@@ -32,9 +32,14 @@ const filteredPads = computed(() => {
 })
 
 async function connect() {
-  if (connected.value) return
-
   console.log('Connecting to:', wsUrl.value)
+
+  // Disconnect if already connected
+  if (wsSender.value) {
+    wsSender.value.dispose()
+    wsSender.value = null
+    connected.value = false
+  }
 
   try {
     wsSender.value = new Transports.WebSocket.Sender(
@@ -264,10 +269,9 @@ onUnmounted(() => {
         v-model="wsUrl"
         type="text"
         placeholder="WebSocket URL"
-        :disabled="connected"
       />
-      <button @click="connect" :disabled="connected">
-        {{ connected ? 'Connected' : 'Connect' }}
+      <button @click="connect">
+        {{ connected ? 'Reconnect' : 'Connect' }}
       </button>
     </div>
 
