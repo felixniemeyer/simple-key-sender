@@ -44,12 +44,18 @@ async function connect() {
   try {
     wsSender.value = new Transports.WebSocket.Sender(
       wsUrl.value,
-      chooseNetPanel
+      chooseNetPanel,
+      {
+        onPanelList: (panelIds) => {
+          if (panelIds.length > 0) return
+          connected.value = false
+          panelName.value = ''
+          rootSender.value = null
+          allPads.value = []
+        }
+      }
     )
-
-    console.log('Created Sender, calling initialize...')
-    await wsSender.value.initialize()
-    console.log('Initialize completed, adding listener...')
+    console.log('Created Sender, waiting for panel attachment...')
 
     // Save URL on successful connection
     localStorage.setItem('wsUrl', wsUrl.value)
